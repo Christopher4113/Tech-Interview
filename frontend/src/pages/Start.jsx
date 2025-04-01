@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/start.css';
 
-const API_BASE_URL = 'http://localhost:8080/api'; // Update with your actual API URL
+const API_BASE_URL = 'http://localhost:8000/api'; // Update with your actual API URL
 
 const Start = () => {
   // State variables
