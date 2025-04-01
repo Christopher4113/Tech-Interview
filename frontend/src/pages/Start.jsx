@@ -13,6 +13,13 @@ const Start = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   
+  // Track voted questions in local storage
+  const [votedQuestions, setVotedQuestions] = useState(() => {
+    // Initialize from localStorage if available
+    const saved = localStorage.getItem('votedQuestions');
+    return saved ? JSON.parse(saved) : {};
+  });
+  
   // Form state for adding new questions
   const [newQuestion, setNewQuestion] = useState({
     question: '',
@@ -22,6 +29,11 @@ const Start = () => {
   
   // Show/hide new question form
   const [showAddForm, setShowAddForm] = useState(false);
+
+  // Save voted questions to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('votedQuestions', JSON.stringify(votedQuestions));
+  }, [votedQuestions]);
 
   // Fetch all tags when component mounts
   useEffect(() => {
@@ -67,20 +79,99 @@ const Start = () => {
     }
   };
 
+  // Check if user has already voted on a question
+  const hasVoted = (questionId) => {
+    return votedQuestions[questionId] !== undefined;
+  };
+
+  // Get the vote type the user made on a question
+  const getUserVoteType = (questionId) => {
+    return votedQuestions[questionId] || null;
+  };
+
   // Handle voting
   const handleVote = async (questionId, voteType) => {
+    // If user already voted with this vote type, undo the vote
+    if (hasVoted(questionId) && getUserVoteType(questionId) === voteType) {
+      try {
+        // Find the question to update locally
+        const questionToUpdate = questions.find(q => q.id === questionId);
+        if (!questionToUpdate) return;
+        
+        // Create a copy with updated vote count
+        const updatedQuestion = { ...questionToUpdate };
+        
+        // Decrement the appropriate vote count
+        if (voteType === 'up') {
+          updatedQuestion.votesUp = Math.max(0, updatedQuestion.votesUp - 1);
+        } else {
+          updatedQuestion.votesDown = Math.max(0, updatedQuestion.votesDown - 1);
+        }
+        
+        // Update questions array
+        setQuestions(questions.map(q => 
+          q.id === questionId ? updatedQuestion : q
+        ));
+        
+        // Remove the vote from votedQuestions
+        const newVotedQuestions = { ...votedQuestions };
+        delete newVotedQuestions[questionId];
+        setVotedQuestions(newVotedQuestions);
+        
+        // Note: In a real app, you would make an API call to undo the vote on the server
+        // await axios.put(`/api/questions/${questionId}/unvote`, { voteType });
+        
+        return;
+      } catch (err) {
+        console.error('Error undoing vote:', err);
+        setError('Failed to undo your vote. Please try again.');
+        return;
+      }
+    }
+    
+    // If user already voted with a different vote type, show error
+    if (hasVoted(questionId) && getUserVoteType(questionId) !== voteType) {
+      setError('You can only vote once per question. Click your previous vote to undo it first.');
+      return;
+    }
+
     try {
-      const response = await axios.put(`/api/questions/${questionId}/vote`, {
+      // Find the question to update locally
+      const questionToUpdate = questions.find(q => q.id === questionId);
+      if (!questionToUpdate) return;
+      
+      // Create a copy with updated vote count
+      const updatedQuestion = { ...questionToUpdate };
+      
+      // Increment the appropriate vote count
+      if (voteType === 'up') {
+        updatedQuestion.votesUp += 1;
+      } else {
+        updatedQuestion.votesDown += 1;
+      }
+      
+      // Update questions array immediately for better UX
+      setQuestions(questions.map(q => 
+        q.id === questionId ? updatedQuestion : q
+      ));
+      
+      // Record that the user has voted on this question
+      setVotedQuestions({
+        ...votedQuestions,
+        [questionId]: voteType
+      });
+      
+      // Make the API call to update the server
+      await axios.put(`/api/questions/${questionId}/vote`, {
         voteType: voteType
       });
       
-      // Update the questions list with the updated question
-      setQuestions(questions.map(q => 
-        q.id === response.data.question.id ? response.data.question : q
-      ));
     } catch (err) {
       console.error('Error voting on question:', err);
       setError('Failed to register your vote. Please try again.');
+      
+      // Revert the optimistic update if the API call fails
+      fetchQuestionsByTag(selectedTag.slug);
     }
   };
 
@@ -132,6 +223,16 @@ const Start = () => {
       tagId: tag.id.toString()
     });
   };
+
+  // Clear error message after 5 seconds
+  useEffect(() => {
+    if (error) {
+      const timer = setTimeout(() => {
+        setError(null);
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [error]);
 
   return (
     <div className="tech-interviewer-container">
@@ -240,14 +341,16 @@ const Start = () => {
                     
                     <div className="voting-container">
                       <button 
-                        className="vote-button upvote"
+                        className={`vote-button upvote ${getUserVoteType(question.id) === 'up' ? 'user-voted' : ''}`}
                         onClick={() => handleVote(question.id, 'up')}
+                        title={getUserVoteType(question.id) === 'up' ? "Click to undo your upvote" : "Vote up"}
                       >
                         👍 {question.votesUp}
                       </button>
                       <button 
-                        className="vote-button downvote"
+                        className={`vote-button downvote ${getUserVoteType(question.id) === 'down' ? 'user-voted' : ''}`}
                         onClick={() => handleVote(question.id, 'down')}
+                        title={getUserVoteType(question.id) === 'down' ? "Click to undo your downvote" : "Vote down"}
                       >
                         👎 {question.votesDown}
                       </button>

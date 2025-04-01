@@ -222,3 +222,39 @@
   .downvote:hover {
     background-color: #5a2a2a;
   }
+  
+  .vote-button.user-voted {
+    border: 2px solid #4a6bff;
+    background-color: #2a3a5a;
+    position: relative;
+  }
+  
+  .vote-button.user-voted:hover {
+    opacity: 0.8;
+  }
+  
+  .upvote.user-voted {
+    background-color: #2a5a2a;
+  }
+  
+  .downvote.user-voted {
+    background-color: #5a2a2a;
+  }
+  
+  .vote-button.user-voted:after {
+    content: "Undo";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 10px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+  
+  .vote-button.user-voted:hover:after {
+    opacity: 1;
+  }
