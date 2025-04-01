@@ -5,27 +5,28 @@
     margin: 0 auto;
     padding: 20px;
     font-family: 'Arial', sans-serif;
+    color: #f0f0f0;
   }
   
   .app-title {
     font-size: 2.5rem;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 10px;
   }
   
   .app-description {
     font-size: 1.2rem;
-    color: #666;
+    color: #cccccc;
     margin-bottom: 30px;
   }
   
   .error-message {
-    background-color: #ffeded;
-    color: #d32f2f;
+    background-color: #5a1a1a;
+    color: #ff9999;
     padding: 12px;
     margin-bottom: 20px;
     border-radius: 4px;
-    border-left: 4px solid #d32f2f;
+    border-left: 4px solid #ff6666;
   }
   
   /* Tags styling */
@@ -41,15 +42,16 @@
   
   .tag-button {
     padding: 8px 16px;
-    background-color: #f0f0f0;
-    border: 1px solid #ddd;
+    background-color: #333333;
+    border: 1px solid #555555;
     border-radius: 20px;
     cursor: pointer;
     transition: all 0.2s;
+    color: #f0f0f0;
   }
   
   .tag-button:hover {
-    background-color: #e0e0e0;
+    background-color: #444444;
   }
   
   .tag-button.active {
@@ -60,9 +62,10 @@
   
   /* Selected tag section */
   .selected-tag-container {
-    background-color: #f9f9f9;
+    background-color: #333333;
     border-radius: 8px;
     padding: 20px;
+    color: #f0f0f0;
   }
   
   .tag-header {
@@ -74,12 +77,12 @@
   
   .tag-header h2 {
     margin: 0 0 10px 0;
-    color: #333;
+    color: #ffffff;
   }
   
   .tag-header p {
     margin: 0 0 20px 0;
-    color: #666;
+    color: #cccccc;
   }
   
   .add-question-button {
@@ -99,11 +102,15 @@
   
   /* Question form */
   .question-form-container {
-    background-color: white;
-    border-radius: 8px;
+    background-color: #2a2a2a;
     padding: 20px;
+    border-radius: 8px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .question-form-container h3 {
+    margin-top: 0;
+    color: #ffffff;
   }
   
   .form-group {
@@ -113,16 +120,17 @@
   .form-group label {
     display: block;
     margin-bottom: 5px;
-    font-weight: bold;
+    color: #cccccc;
   }
   
   .form-group textarea,
   .form-group select {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
+    border: 1px solid #555555;
     border-radius: 4px;
-    font-family: inherit;
+    background-color: #1a1a1a;
+    color: #f0f0f0;
   }
   
   .form-group textarea {
@@ -132,7 +140,7 @@
   
   .submit-button {
     padding: 10px 20px;
-    background-color: #4caf50;
+    background-color: #4a6bff;
     color: white;
     border: none;
     border-radius: 4px;
@@ -141,12 +149,13 @@
   }
   
   .submit-button:hover {
-    background-color: #3e8e41;
+    background-color: #3a5be0;
   }
   
   /* Questions list */
-  .questions-container {
-    margin-top: 20px;
+  .questions-container h3 {
+    color: #ffffff;
+    margin-bottom: 15px;
   }
   
   .questions-list {
@@ -156,10 +165,9 @@
   }
   
   .question-card {
-    background-color: white;
+    background-color: #2a2a2a;
     border-radius: 8px;
     padding: 15px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: space-between;
   }
@@ -171,41 +179,46 @@
   .question-content h4 {
     margin-top: 0;
     margin-bottom: 10px;
-    color: #333;
+    color: #ffffff;
   }
   
   .answer-container {
-    background-color: #f5f5f5;
+    background-color: #1a1a1a;
     padding: 10px;
     border-radius: 4px;
     margin-top: 10px;
   }
   
+  .answer-container p {
+    margin: 0;
+    color: #f0f0f0;
+  }
+  
   .voting-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    gap: 5px;
     margin-left: 15px;
-    gap: 8px;
   }
   
   .vote-button {
     padding: 5px 10px;
-    background-color: transparent;
-    border: 1px solid #ddd;
+    background-color: #333333;
+    border: 1px solid #555555;
     border-radius: 4px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 5px;
+    transition: background-color 0.2s;
+    color: #f0f0f0;
   }
   
-  .vote-button.upvote:hover {
-    background-color: #e8f5e9;
-    border-color: #4caf50;
+  .vote-button:hover {
+    background-color: #444444;
   }
   
-  .vote-button.downvote:hover {
-    background-color: #ffebee;
-    border-color: #f44336;
+  .upvote:hover {
+    background-color: #2a5a2a;
+  }
+  
+  .downvote:hover {
+    background-color: #5a2a2a;
   }

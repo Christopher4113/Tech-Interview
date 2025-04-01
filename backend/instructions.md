@@ -60,7 +60,7 @@ Run the compiled server:
 ./server
 ```
 
-By default, the backend should be running on `http://127.0.0.1:8080`
+By default, the backend should be running on `http://127.0.0.1:8000`
 
 ## API Endpoints
 

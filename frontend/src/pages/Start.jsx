@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/start.css';
 
-const API_BASE_URL = 'http://localhost:8000/api'; // Update with your actual API URL
+// Remove the API_BASE_URL constant since we'll use relative URLs
+// const API_BASE_URL = 'http://localhost:8000/api';
 
 const Start = () => {
   // State variables
@@ -38,7 +39,7 @@ const Start = () => {
   const fetchTags = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/tags`);
+      const response = await axios.get(`/api/tags`);
       setTags(response.data.tags);
       // If tags exist, select the first one by default
       if (response.data.tags.length > 0) {
@@ -56,7 +57,7 @@ const Start = () => {
   const fetchQuestionsByTag = async (tagSlug) => {
     setIsLoading(true);
     try {
-      const response = await axios.get(`${API_BASE_URL}/questions/tag/slug/${tagSlug}`);
+      const response = await axios.get(`/api/questions/tag/slug/${tagSlug}`);
       setQuestions(response.data.questions);
     } catch (err) {
       console.error('Error fetching questions:', err);
@@ -69,7 +70,7 @@ const Start = () => {
   // Handle voting
   const handleVote = async (questionId, voteType) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/questions/${questionId}/vote`, {
+      const response = await axios.put(`/api/questions/${questionId}/vote`, {
         voteType: voteType
       });
       
@@ -93,7 +94,7 @@ const Start = () => {
     }
     
     try {
-      const response = await axios.post(`${API_BASE_URL}/questions`, newQuestion);
+      const response = await axios.post(`/api/questions`, newQuestion);
       
       // Add the new question to the list if we're viewing the same tag
       if (selectedTag && selectedTag.id.toString() === newQuestion.tagId) {

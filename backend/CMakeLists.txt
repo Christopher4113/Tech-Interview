@@ -18,18 +18,31 @@ add_executable(server
     src/routes.cpp
 )
 
-# Include directories
+# Include directories for macOS
 target_include_directories(server PRIVATE 
-    /usr/include  # Crow
-    ${NLOHMANN_JSON_INCLUDE_DIRS}  # JSON from pkg-config
-    ${PostgreSQL_INCLUDE_DIRS}  # PostgreSQL
+    /usr/local/include  # macOS Intel Homebrew path
+    /opt/homebrew/include  # Apple Silicon Homebrew path
+    ${NLOHMANN_JSON_INCLUDE_DIRS}
+    ${PostgreSQL_INCLUDE_DIRS}
     ${PQXX_INCLUDE_DIRS}
     src
 )
 
-# Link libraries
+# Link directories for macOS
+link_directories(
+    /usr/local/lib
+    /opt/homebrew/lib
+    ${PQXX_LIBRARY_DIRS}
+)
+
+# Link libraries with explicit paths for macOS
 target_link_libraries(server 
-    ${PostgreSQL_LIBRARIES}  # PostgreSQL
-    ${PQXX_LIBRARIES}
+    ${PostgreSQL_LIBRARIES}
+    /opt/homebrew/lib/libpqxx.dylib  # Using the symlink found in your system
     pthread
 )
+
+# Print debug information
+message(STATUS "PostgreSQL_LIBRARIES: ${PostgreSQL_LIBRARIES}")
+message(STATUS "PQXX_LIBRARIES: ${PQXX_LIBRARIES}")
+message(STATUS "PQXX_LIBRARY_DIRS: ${PQXX_LIBRARY_DIRS}")

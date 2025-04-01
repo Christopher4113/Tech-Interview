@@ -1,3 +1,6 @@
 {
-  "cmake.sourceDirectory": "C:/Users/Christopher Lam/Desktop/Projects/Tech-Interview/backend"
+  "cmake.sourceDirectory": "C:/Users/Christopher Lam/Desktop/Projects/Tech-Interview/backend",
+  "files.associations": {
+    "ios": "cpp"
+  }
 }
